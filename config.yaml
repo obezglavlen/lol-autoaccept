@@ -1,0 +1,10 @@
+window_title_contains: "League of Legends"
+template_path: "assets/accept_template.png"
+poll_interval_ms: 700
+match_threshold: 0.86
+click_cooldown_sec: 8.0
+hotkey_stop: "f10"
+multi_scale:
+  enabled: true
+  scales: [0.85, 0.92, 1.0, 1.08, 1.15]
+log_level: "DEBUG"
