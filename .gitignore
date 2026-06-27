@@ -1,0 +1,44 @@
+# Build outputs
+dist/
+build/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PyInstaller
+*.manifest
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Dependencies
+node_modules/
+*.whl
+*.egg-info/
+*.egg
+
+# IDE & editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
