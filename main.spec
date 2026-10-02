@@ -1,12 +1,18 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_all
+
+
+tkinterdnd2_datas, tkinterdnd2_binaries, tkinterdnd2_hiddenimports = collect_all(
+    'tkinterdnd2'
+)
 
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
-    datas=[],
-    hiddenimports=[],
+    binaries=tkinterdnd2_binaries,
+    datas=tkinterdnd2_datas,
+    hiddenimports=tkinterdnd2_hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -22,7 +28,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='main',
+    name='lolautoaccept',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

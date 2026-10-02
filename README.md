@@ -1,74 +1,81 @@
-# LoL Auto-Accept App
+# Auto Accept
 
-A simple GUI application that monitors the League of Legends client window and automatically clicks the "Accept" button when it appears.
+A Windows desktop app that watches one selected process window for a saved image template and clicks the matching location automatically.
 
 ## Features
 
-- Simple tkinter GUI with Start, Stop, and Image Upload buttons
-- Upload a screenshot of the "Accept" button for template matching
-- Automatically detects and clicks the accept button when the game is ready
-- Visual status indicators
+- Native Drag&Drop and file picker for PNG, JPG, JPEG, and BMP templates
+- Process selector containing applications with visible windows
+- Image search limited to the selected process window
+- Automatic click at the center of a template match
+- Persistent template and process selection between launches
+- Start/Stop controls and live status messages
 
 ## Requirements
 
 - Python 3.8+
-- Windows (tested on Windows 10/11)
-- League of Legends client installed
+- Windows 10/11
 
 ## Installation
-
-1. Install Python dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Make sure you have the required packages:
-
-```bash
-pip install pygetwindow pyautogui opencv-python Pillow
-```
-
 ## Usage
 
-1. **Launch the app:**
+1. Start the app:
+
    ```bash
    python main.py
    ```
 
-2. **Upload an image:**
-   - Click "Browse" to select a screenshot of the "Accept" button from the League client
-   - The image will be displayed in the UI
+2. Drop a template image onto the image area or click **Choose image**.
+3. Choose the target application from **Process window**. Use **Refresh** after opening a new application.
+4. Keep the selected process window visible and click **Start scanning**.
+5. Click **Stop** to end monitoring.
 
-3. **Attach the League window:**
-   - Click on the League of Legends client window to make it the active window
+## Persistence
 
-4. **Start monitoring:**
-   - Click "Start" to begin monitoring for the accept button
+The app stores its state under `%LOCALAPPDATA%\LoLAutoAccept`:
 
-5. **Stop when done:**
-   - Click "Stop" to stop monitoring
+- `accept_template.png` — normalized copy of the selected image
+- `selected_process.json` — executable name, last PID, and window title
+
+On restart, the app restores the template and resolves the saved process by PID or executable name.
 
 ## How it works
 
-1. The app uses template matching to find the accept button by comparing your uploaded image
-2. It continuously monitors the League client window for the accept button
-3. When found, it automatically clicks the button using pyautogui
+1. The selected window bounds are read from the process that owns the window.
+2. Screenshots are restricted to those bounds.
+3. OpenCV template matching searches the screenshot for the saved image.
+4. A match at or above the configured confidence threshold is clicked using screen coordinates.
 
 ## Tips
 
-- For best results, upload a clear screenshot of the accept button (without too much surrounding UI)
-- The app works best when the League client window is visible and active
-- You can upload a new image at any time by clicking "Browse"
+- Use a tightly cropped and visually distinctive template.
+- Keep the target window visible and unobstructed.
+- If the process was opened after Auto Accept, press **Refresh** and select it.
+- You can replace the image at any time by dropping or choosing another file.
 
 ## Troubleshooting
 
-- **"No League window found"**: Make sure the League client is running and has a window
-- **"Window not visible"**: Click on the League window to make it visible
-- **Template matching fails**: Try uploading a different image of the accept button
+- **Process is missing:** ensure it has a visible, non-minimized window, then press **Refresh**.
+- **Window cannot be found:** reselect the running process; its PID may have changed.
+- **Template is not matched:** capture a clearer or more tightly cropped image.
+
+## Build
+
+```bash
+pyinstaller --noconfirm --clean main.spec
+```
+
+The standalone executable is written to `dist\lolautoaccept.exe`.
 
 ## Files
 
-- `main.py` - Main application code
-- `requirements.txt` - Python dependencies
-- `README.md` - This file
+- `main.py` — GUI and scanning logic
+- `image_storage.py` — durable image storage
+- `process_selection.py` — process selection and persistence
+- `tests/` — automated test suite
+- `main.spec` — PyInstaller configuration
